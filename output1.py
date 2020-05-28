@@ -2,13 +2,21 @@ import numpy as np
 import pandas as pd
 
 # reading the csv file
+
 data = pd.read_excel('input1.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
-doc = data['DOC'][:].tolist()
+del data['CO_No']
+
+data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+
+data.append(data2, ignore_index = True) 
+
 data.drop_duplicates(subset = ["DOC"], keep="first", inplace=True)
+data.sort_values(by=['AN'])
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
+data.to_excel("output.xlsx")
 
 print('Result 1:\n')
 print(data)
@@ -52,7 +60,8 @@ for index, row in df.iterrows():
 	input2_BS.at[x, 'CA'] = row[rpr[0]] + row[rpr[1]]
 	input2_SA.at[x, 'CA'] = row[rpr[2]] + row[rpr[3]]
 	x = x + 1	
-		
+#print('CA SAHBI\n\n')
+#print(input2_BS)		
 
 table3 = df.copy()
 table3.insert(2, "Bejaoui Sahbi EX", [0.0] * ran, True)
