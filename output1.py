@@ -18,9 +18,9 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 data.to_excel("output.xlsx")
 
-print('Result 1:\n')
-print(data)
-print('\n\n')
+#print('Result 1:\n')
+#print(data)
+#print('\n\n')
 
 #2
 ran = 2025 - 2016 + 1
@@ -44,8 +44,8 @@ for y in ind:
 
 df.to_excel("table2.xlsx")
 
-print('Result 2:\n')
-print (df)
+#print('Result 2:\n')
+#print (df)
 print('\n\n')
 
 #3
@@ -112,8 +112,8 @@ for index, row in input2_SA.iterrows():
 	z = z + 1
 
 table3.to_excel("table3.xlsx")
-print ('Result 3:\n')
-print(table3)
+#print ('Result 3:\n')
+#print(table3)
 print('\n\n')
 
 #4
@@ -130,3 +130,27 @@ for index, row in table3.iterrows():
 table4.to_excel("table4.xlsx")
 print('Result 4: \n')
 print(table4)
+
+table5 = table4.copy()
+table4['CA BS'] = [0.0] * ran
+table4['CA SA'] = [0.0] * ran
+
+for index, row in df.iterrows():
+	table4.at[index, 'CA BS'] = row[rpr[0]] + row[rpr[1]]
+	table4.at[index, 'CA SA'] = row[rpr[2]] + row[rpr[3]]
+
+for index, row in table4.iterrows():
+	if(row['CA BS'] != 0):
+		table5.at[index, 'Bejaoui Sahbi'] = row['Bejaoui Sahbi'] / row['CA BS']
+	else:
+		table5.at[index, 'Bejaoui Sahbi'] = 0
+	if(row['CA SA'] != 0):
+		table5.at[index, 'Saidi Abdelkarim'] = row['Saidi Abdelkarim'] / row['CA SA']
+	else:
+		table5.at[index, 'Saidi Abdelkarim'] = 0
+	
+print('Result 5: \n')
+print(table5)
+
+table5.to_excel("table5.xlsx")
+
