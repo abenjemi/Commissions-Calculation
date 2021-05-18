@@ -9,16 +9,16 @@ del data['CO_No']
 data2 = pd.read_excel('input1a.xlsx', header = 0)
 #data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
-data = data.append(data2, ignore_index = True)
+data = data.append(data2, ignore_index = True) #get all the data
 #print('data\n\n')
 #print(data) 
 
-data.drop_duplicates(subset = ["DOC"], keep="first", inplace=True)
+data.drop_duplicates(subset = ["DOC"], keep="first", inplace=True) #drop duplicates
 data.sort_values(by=['AN'])
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
-data.to_excel("output.xlsx")
+data.to_excel("data.xlsx") #get the duplicates free table on excel
 
 #print('Result 1:\n')
 #print(data)
@@ -44,11 +44,11 @@ for y in ind:
 				summ = summ + row['Total HT']
 		df.at[y, rep] = summ
 
-df.to_excel("table2.xlsx")
+df.to_excel("table2.xlsx") #CA
 
 #print('Result 2:\n')
 #print (df)
-print('\n\n')
+#print('\n\n')
 
 #3
 input2_BS = pd.read_excel('input2_BS.xlsx', header = 0)
@@ -115,10 +115,10 @@ for index, row in input2_SA.iterrows():
 		table3.at[z, 'Saidi Abdelkarim EX'] = 0
 	z = z + 1
 
-table3.to_excel("table3.xlsx")
+table3.to_excel("table3.xlsx") #tableau 3
 #print ('Result 3:\n')
 #print(table3)
-print('\n\n')
+#print('\n\n')
 
 #4
 f = {
@@ -132,8 +132,10 @@ for index, row in table3.iterrows():
 	table4.at[index, 'Saidi Abdelkarim'] = row['Saidi Abdelkarim'] + row['Abdelkarim Saidi REV'] + row['Saidi Abdelkarim EX']
 
 table4.to_excel("table4.xlsx")
-print('Result 4: \n')
-print(table4)
+#print('Result 4: \n')
+#print(table4)
+
+#5
 
 table5 = table4.copy()
 table4['CA BS'] = [0.0] * ran
@@ -153,8 +155,8 @@ for index, row in table4.iterrows():
 	else:
 		table5.at[index, 'Saidi Abdelkarim'] = 0
 	
-print('Result 5: \n')
-print(table5)
+#print('Result 5: \n')
+#print(table5)
 
 table5.to_excel("table5.xlsx")
 
