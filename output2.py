@@ -58,7 +58,7 @@ data['RAP'] = data['Total TTC'] - data['réglements']
 
 data = data.drop(['DR_Montant', 'montant', 'DR_sum', 'mt_sum'], axis = 1)
 
-data.to_excel("TABLEAU A.xlsx")
+data.to_excel("etat_reglements_factures.xlsx")
 
 print("TABLEAU A: \n")
 print(data)
@@ -74,9 +74,9 @@ for index, row in data.iterrows():
 
 print('TABLEAU B: \n')
 print(data)
-data.to_excel("TABLEAU B.xlsx")
+data.to_excel("etat_factures_reglees100%_période_saisie.xlsx")
 
-table5 = pd.read_excel('table5.xlsx', header = 0)
+table5 = pd.read_excel('rapport_commissions_CA.xlsx', header = 0)
 #table5 = pd.read_excel('table5.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 ran = 2025 - 2016 + 1
@@ -154,5 +154,5 @@ print('\n')
 print(f'commissions abdeelkrim saidi à payer, période: {date_deb} - {date_fin}\n') 
 print(SA)
 
-SA.to_excel("TABLEAU D.xlsx")
-BS.to_excel("TABLEAU C.xlsx")
+SA.to_excel("Commissions_SaidiA_periode_saisie.xlsx")
+BS.to_excel("Commissions_BejaouiS_periode_saisie.xlsx")

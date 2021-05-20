@@ -44,14 +44,14 @@ for y in ind:
 				summ = summ + row['Total HT']
 		df.at[y, rep] = summ
 
-df.to_excel("table2.xlsx") #CA
+df.to_excel("CA_BejaouiS_SaidiA.xlsx") #CA
 
 #print('Result 2:\n')
 #print (df)
 #print('\n\n')
 
 #3
-input2_BS = pd.read_excel('Objectif_Sahbi_Bejaoui.xlsx', header = 0)
+input2_BS = pd.read_excel('Objectifs_BejaouiS.xlsx', header = 0)
 #input2_BS = pd.read_excel('input2_BS.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 input2_BS = input2_BS.fillna(0)
 input2_BS['CA'] = [0.0] * ran
@@ -61,7 +61,7 @@ input2_BS['Sahbi Bejaoui REV'] = [0.0] * ran
 BS = df["Bejaoui Sahbi"]
 SB_REV = df["Sahbi Bejaoui REV"]
 
-input2_SA = pd.read_excel('Objectif_Abdelkarim_Saidi.xlsx', header = 0)
+input2_SA = pd.read_excel('Objectifs_SaidiA.xlsx', header = 0)
 #input2_SA = pd.read_excel('input2_SA.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 input2_SA = input2_SA.fillna(0)
 input2_SA['CA'] = [0.0] * ran
@@ -115,7 +115,7 @@ for index, row in input2_SA.iterrows():
 		table3.at[z, 'Saidi Abdelkarim EX'] = 0
 	z = z + 1
 
-table3.to_excel("table3.xlsx") #tableau 3
+table3.to_excel("Commissions_BejaouiS_SaidiA_details.xlsx") #tableau 3
 #print ('Result 3:\n')
 #print(table3)
 #print('\n\n')
@@ -131,7 +131,7 @@ for index, row in table3.iterrows():
 	table4.at[index, 'Bejaoui Sahbi'] = row['Bejaoui Sahbi'] + row['Sahbi Bejaoui REV'] + row['Bejaoui Sahbi EX']
 	table4.at[index, 'Saidi Abdelkarim'] = row['Saidi Abdelkarim'] + row['Abdelkarim Saidi REV'] + row['Saidi Abdelkarim EX']
 
-table4.to_excel("table4.xlsx")
+table4.to_excel("Commissions_BejaouiS_SaidiA_total.xlsx")
 #print('Result 4: \n')
 #print(table4)
 
@@ -158,5 +158,5 @@ for index, row in table4.iterrows():
 #print('Result 5: \n')
 #print(table5)
 
-table5.to_excel("table5.xlsx")
+table5.to_excel("rapport_commissions_CA.xlsx")
 
