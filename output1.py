@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 
-data = pd.read_excel('input1_old.xlsx', header = 0)
+data = pd.read_excel('CA_MS.xlsx', header = 0)
 #data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 del data['CO_No']
 
-data2 = pd.read_excel('input1a.xlsx', header = 0)
+data2 = pd.read_excel('CA_MSMARINE.xlsx', header = 0)
 #data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 data = data.append(data2, ignore_index = True) #get all the data
@@ -51,7 +51,7 @@ df.to_excel("table2.xlsx") #CA
 #print('\n\n')
 
 #3
-input2_BS = pd.read_excel('input2_BS.xlsx', header = 0)
+input2_BS = pd.read_excel('Objectif_Sahbi_Bejaoui.xlsx', header = 0)
 #input2_BS = pd.read_excel('input2_BS.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 input2_BS = input2_BS.fillna(0)
 input2_BS['CA'] = [0.0] * ran
@@ -61,7 +61,7 @@ input2_BS['Sahbi Bejaoui REV'] = [0.0] * ran
 BS = df["Bejaoui Sahbi"]
 SB_REV = df["Sahbi Bejaoui REV"]
 
-input2_SA = pd.read_excel('input2_SA.xlsx', header = 0)
+input2_SA = pd.read_excel('Objectif_Abdelkarim_Saidi.xlsx', header = 0)
 #input2_SA = pd.read_excel('input2_SA.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 input2_SA = input2_SA.fillna(0)
 input2_SA['CA'] = [0.0] * ran

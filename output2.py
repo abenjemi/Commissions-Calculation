@@ -14,14 +14,6 @@ while not isValid:
 
 print(f'La date début est {date_deb}\n')
 
-"""def convert(text):
-	for fmt in ('%d/%m/%y', '%d/%m/%Y'):
-		try:
-			return datetime.datetime.strptime(text, fmt).date()
-		except ValueError:
-			pass
-	raise ValueError('no valid date format found')"""
-
 isValid = False
 while not isValid:
 	userIn = input("Entrer une date fin: ")
@@ -35,11 +27,13 @@ while not isValid:
 		print("Suivre ce format: dd/mm/yy !\n")
 print(f'La date fin est {date_fin}\n')
 
-data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+#data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+data = pd.read_excel('input1_old.xlsx', header = 0)
 
 del data['CO_No']
 
-data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+data2 = pd.read_excel('input1a.xlsx', header = 0)
+#data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 data = data.append(data2, ignore_index = True)
 data.sort_values(by=['AN'])
@@ -82,7 +76,8 @@ print('TABLEAU B: \n')
 print(data)
 data.to_excel("TABLEAU B.xlsx")
 
-table5 = pd.read_excel('table5.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+table5 = pd.read_excel('table5.xlsx', header = 0)
+#table5 = pd.read_excel('table5.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 ran = 2025 - 2016 + 1
 ind = range(2016, 2016 + ran)
