@@ -1,5 +1,22 @@
 import numpy as np
 import pandas as pd
+from tkinter import *
+
+root = Tk()
+
+# Create a label widget
+myLabel = Label(root, text="Veuillez cliquer pour voir les fichiers excel suivants sur le meme dossier:").grid(row=0, column=0)
+fichier1 = Label(root, text="1. CA_BejaouiS_SaidiA").grid(row=1, column=0)
+fichier2 = Label(root, text="2. Commissions_BejaouiS_SaidiA_details").grid(row=2, column=0)
+fichier3 = Label(root, text="3. Commissions_BejaouiS_SaidiA_total").grid(row=3, column=0)
+fichier4 = Label(root, text="4. rapport_commissions_CA").grid(row=4, column=0)
+
+root.resizable(width=False, height=False)
+
+myButton = Button(root, text="Cliquez SVP", command=root.destroy).grid(row=6)
+
+
+root.mainloop()
 
 data = pd.read_excel('CA_MS.xlsx', header = 0)
 #data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
