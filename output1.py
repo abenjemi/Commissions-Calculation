@@ -13,7 +13,7 @@ fichier4 = Label(root, text="4. rapport_commissions_CA").grid(row=4, column=0)
 
 root.resizable(width=False, height=False)
 
-myButton = Button(root, text="Cliquez SVP", command=root.destroy).grid(row=6)
+myButton = Button(root, text="Cliquez SVP", command=root.destroy, fg="blue", bg="white").grid(row=6)
 
 
 root.mainloop()
