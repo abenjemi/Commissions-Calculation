@@ -59,7 +59,7 @@ def fin_fun():
         label4.place(x=10, y=130)
         e2.config(state='disabled')
         button2.config(state='disabled')
-        messagebox.showinfo("", "Veuillez cliquer pour voir les resultats suivants sur le meme dossier:\n1. etat_reglements_factures\n2. etat_factures_reglees100%_période_saisie\n3. Commissions_BejaouiS_periode_saisie\n4. Commissions_SaidiA_periode_saisie")
+        messagebox.showinfo("Output 2", "Veuillez cliquer pour voir les resultats suivants sur le meme dossier:\n1. etat_reglements_factures\n2. etat_factures_reglees100%_période_saisie\n3. Commissions_BejaouiS_periode_saisie\n4. Commissions_SaidiA_periode_saisie")
         root.destroy()
 
 
@@ -94,11 +94,11 @@ root.mainloop()
 
 
 #data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
-data = pd.read_excel('CA_MS.xlsx', header = 0)
+data = pd.read_excel('MS_M_CalculComms.xlsx', header = 0)
 
 del data['CO_No']
 
-data2 = pd.read_excel('CA_MSMARINE.xlsx', header = 0)
+data2 = pd.read_excel('MSMARINE_CalculComms.xlsx', header = 0)
 #data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 data = data.append(data2, ignore_index = True)
@@ -112,17 +112,18 @@ del data['INTITULE CLIENT']
 del data['N° CLIENT']
 del data['Marge']
 
-data[['DR_sum', 'mt_sum']]=data.groupby('DOC')['DR_Montant', 'montant'].transform('sum')
+#data[['DR_sum', 'mt_sum']]=data.groupby('DOC')['DR_Montant', 'montant'].transform('sum')
 
-data = data.sort_values('Date Regl').drop_duplicates('DOC', keep='last')
+data = data.sort_values('Date_Regl').drop_duplicates('DOC', keep='last')
 #data = data.groupby('DOC')['Date Regl'].max().reset_index()
 
 #data = data.groupby(['DOC'])['montant'].sum().reset_index()
 
-data['réglements'] = data['DR_sum'] + data['mt_sum']
+data['réglements'] = data['Montant_Reglement']
 data['RAP'] = data['Total TTC'] - data['réglements']
 
-data = data.drop(['DR_Montant', 'montant', 'DR_sum', 'mt_sum'], axis = 1)
+#data = data.drop(['DR_Montant', 'montant', 'DR_sum', 'mt_sum'], axis = 1)
+#data = data.drop(['Montant_Reglement'])
 
 data.to_excel("etat_reglements_factures.xlsx")
 
@@ -131,7 +132,7 @@ print(data)
 print("\n\n")
 
 for index, row in data.iterrows():
-	if (row['Date Regl'] < date_deb or row['Date Regl'] > date_fin):
+	if (row['Date_Regl'] < date_deb or row['Date_Regl'] > date_fin):
 		data.drop(index, inplace=True)
 
 for index, row in data.iterrows():

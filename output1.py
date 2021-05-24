@@ -3,6 +3,7 @@ import pandas as pd
 from tkinter import *
 
 root = Tk()
+root.title("Output 1")
 
 # Create a label widget
 myLabel = Label(root, text="Veuillez cliquer pour voir les fichiers excel suivants sur le meme dossier:").grid(row=0, column=0)
@@ -18,12 +19,12 @@ myButton = Button(root, text="Cliquez SVP", command=root.destroy, fg="blue", bg=
 
 root.mainloop()
 
-data = pd.read_excel('CA_MS.xlsx', header = 0)
+data = pd.read_excel('MS_M_CalculComms.xlsx', header = 0)
 #data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 del data['CO_No']
 
-data2 = pd.read_excel('CA_MSMARINE.xlsx', header = 0)
+data2 = pd.read_excel('MSMARINE_CalculComms.xlsx', header = 0)
 #data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 data = data.append(data2, ignore_index = True) #get all the data
