@@ -108,9 +108,9 @@ pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 
-del data['INTITULE CLIENT']
-del data['N° CLIENT']
-del data['Marge']
+#del data['INTITULE CLIENT']
+#del data['N° CLIENT']
+#del data['Marge']
 
 #data[['DR_sum', 'mt_sum']]=data.groupby('DOC')['DR_Montant', 'montant'].transform('sum')
 
@@ -119,8 +119,8 @@ data = data.sort_values('Date_Regl').drop_duplicates('DOC', keep='last')
 
 #data = data.groupby(['DOC'])['montant'].sum().reset_index()
 
-data['réglements'] = data['Montant_Reglement']
-data['RAP'] = data['Total TTC'] - data['réglements']
+#data['réglements'] = data['Montant_Reglement']
+data['RAP'] = data['Total TTC'] - data['Montant_Reglement']
 
 #data = data.drop(['DR_Montant', 'montant', 'DR_sum', 'mt_sum'], axis = 1)
 #data = data.drop(['Montant_Reglement'])
@@ -166,7 +166,7 @@ for y in ind:
 		if ((row['AN'] == y) and (row['Representant'] == 'Bejaoui Sahbi' or row['Representant'] == 'Sahbi Bejaoui REV')):
 			HT = HT + row['Total HT']
 			TTC = TTC + row['Total TTC']
-			regl = regl + row['réglements']
+			regl = regl + row['Montant_Reglement']
 			RAP = RAP + row['RAP']
 	BS.at[y, 'CA HT periode'] = HT
 	BS.at[y, 'CA TTC période'] = TTC
@@ -184,7 +184,7 @@ for y in ind:
 		if ((row['AN'] == y) and (row['Representant'] == 'Saidi Abdelkarim' or row['Representant'] == 'Abdelkarim Saidi REV')):
 			HT = HT + row['Total HT']
 			TTC = TTC + row['Total TTC']
-			regl = regl + row['réglements']
+			regl = regl + row['Montant_Reglement']
 			RAP = RAP + row['RAP']
 	SA.at[y, 'CA HT periode'] = HT
 	SA.at[y, 'CA TTC période'] = TTC
