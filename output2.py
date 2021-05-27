@@ -114,10 +114,16 @@ pd.set_option('display.width', 1000)
 
 #data[['DR_sum', 'mt_sum']]=data.groupby('DOC')['DR_Montant', 'montant'].transform('sum')
 
-data = data.sort_values('Date_Regl').drop_duplicates('DOC', keep='last')
+data = data.sort_values('Date_Regl')
+#data.groupby(['DOC'])['Montant_Reglement'].sum().reset_index()#.drop_duplicates('DOC', keep='last')
+
+data['Montant_Reglement'] = data.groupby(['DOC'])['Montant_Reglement'].transform('sum')
+
+data = data.drop_duplicates('DOC', keep='last')
+
 #data = data.groupby('DOC')['Date Regl'].max().reset_index()
 
-#data = data.groupby(['DOC'])['montant'].sum().reset_index()
+#data = data.groupby(['DOC'])['Montant_Reglement'].sum()
 
 #data['réglements'] = data['Montant_Reglement']
 data['RAP'] = data['Total TTC'] - data['Montant_Reglement']
@@ -127,9 +133,9 @@ data['RAP'] = data['Total TTC'] - data['Montant_Reglement']
 
 data.to_excel("etat_reglements_factures.xlsx")
 
-print("TABLEAU A: \n")
-print(data)
-print("\n\n")
+#print("TABLEAU A: \n")
+#print(data)
+#print("\n\n")
 
 for index, row in data.iterrows():
 	if (row['Date_Regl'] < date_deb or row['Date_Regl'] > date_fin):
@@ -139,8 +145,8 @@ for index, row in data.iterrows():
 	if (row['RAP'] > 0):
 		data.drop(index, inplace=True)
 
-print('TABLEAU B: \n')
-print(data)
+#print('TABLEAU B: \n')
+#print(data)
 data.to_excel("etat_factures_reglees100%_période_saisie.xlsx")
 
 table5 = pd.read_excel('rapport_commissions_CA.xlsx', header = 0)
@@ -214,12 +220,12 @@ SA = SA.append(SA.sum().rename('Total'))
 del BS['com %']
 del SA['com %']
 
-print(f'commissions Sahbi Bejaoui à payer, période: {date_deb} - {date_fin}\n')
-print(BS)
-print('\n')
+#print(f'commissions Sahbi Bejaoui à payer, période: {date_deb} - {date_fin}\n')
+#print(BS)
+#print('\n')
 
-print(f'commissions abdeelkrim saidi à payer, période: {date_deb} - {date_fin}\n') 
-print(SA)
+#print(f'commissions abdeelkrim saidi à payer, période: {date_deb} - {date_fin}\n') 
+#print(SA)
 
 SA.to_excel("Commissions_SaidiA_periode_saisie.xlsx")
 BS.to_excel("Commissions_BejaouiS_periode_saisie.xlsx")
