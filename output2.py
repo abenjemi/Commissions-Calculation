@@ -1,6 +1,7 @@
 import datetime
 import numpy as np
 import pandas as pd
+import math
 import re
 from tkinter import *
 from tkinter import messagebox
@@ -127,6 +128,11 @@ data = data.drop_duplicates('DOC', keep='last')
 
 #data['réglements'] = data['Montant_Reglement']
 data['RAP'] = data['Total TTC'] - data['Montant_Reglement']
+data['RAP'] = data['RAP'].apply(np.floor)
+#math.floor(data['RAP'])
+#if ((data['RAP'] < 1) and (data['RAP'] > 0)):
+#    data['RAP'] =  0
+
 
 #data = data.drop(['DR_Montant', 'montant', 'DR_sum', 'mt_sum'], axis = 1)
 #data = data.drop(['Montant_Reglement'])
@@ -141,9 +147,12 @@ for index, row in data.iterrows():
 	if (row['Date_Regl'] < date_deb or row['Date_Regl'] > date_fin):
 		data.drop(index, inplace=True)
 
-for index, row in data.iterrows():
-	if (row['RAP'] >= 0):
-		data.drop(index, inplace=True)
+# for index, row in data.iterrows():
+# 	if (row['RAP'] > 0.5):
+# 		data.drop(index, inplace=True)
+data.drop(data[data['RAP'] > 0].index, inplace = True)
+# index_names = data[ data['Age'] == 21 ].index
+# df.drop(index_names, inplace = True)
 
 #print('TABLEAU B: \n')
 #print(data)
