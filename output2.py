@@ -142,7 +142,7 @@ for index, row in data.iterrows():
 		data.drop(index, inplace=True)
 
 for index, row in data.iterrows():
-	if (row['RAP'] > 0.1):
+	if (row['RAP'] >= 0):
 		data.drop(index, inplace=True)
 
 #print('TABLEAU B: \n')
