@@ -158,69 +158,116 @@ data.drop(data[data['RAP'] > 0].index, inplace = True)
 #print(data)
 data.to_excel("etat_factures_reglees100%_période_saisie.xlsx")
 
-table5 = pd.read_excel('rapport_commissions_CA.xlsx', header = 0)
+orig_data = pd.read_excel('data.xlsx', header = 0)
+
+table4 = pd.read_excel('Commissions_BejaouiS_SaidiA_total.xlsx', header = 0)
+
+#table5 = pd.read_excel('rapport_commissions_CA.xlsx', header = 0)
 #table5 = pd.read_excel('table5.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 ran = 2025 - 2016 + 1
 ind = range(2016, 2016 + ran)
 d = {	
-    'CA HT periode':[0.0] * ran,
-    'CA TTC période':[0.0] * ran,
-    'total réglements période':[0.0] * ran,
-    'total RAP':[0.0] * ran, 
-    'comms période à payer':[0.0] * ran 
+    'factures HT année':[0.0] * ran,
+    'factures TTC année':[0.0] * ran,
+    'factures réglées période':[0.0] * ran,
+    'pourcentage règlement':[0.0] * ran, 
+    'commissions année':[0.0] * ran,
+    'commission période':[0.0] * ran,
+    'commission RAP':[0.0] * ran
 }
-BS = pd.DataFrame(d, columns = ['CA HT periode' , 'CA TTC période', 'total réglements période' , 'total RAP' , 'comms période à payer'], index = list(ind))
+BS = pd.DataFrame(d, columns = ['factures HT année', 'factures TTC année', 'factures réglées période', 'pourcentage règlement', 'commissions année', 'commission période', 'commission RAP'], index = list(ind))
 
 for y in ind:
-	HT = 0
-	TTC = 0
-	regl = 0
-	RAP = 0
-	for index, row in data.iterrows():
-		if ((row['AN'] == y) and (row['Representant'] == 'Bejaoui Sahbi' or row['Representant'] == 'Sahbi Bejaoui REV')):
-			HT = HT + row['Total HT']
-			TTC = TTC + row['Total TTC']
-			regl = regl + row['Montant_Reglement']
-			RAP = RAP + row['RAP']
-	BS.at[y, 'CA HT periode'] = HT
-	BS.at[y, 'CA TTC période'] = TTC
-	BS.at[y, 'total réglements période'] = regl
-	BS.at[y, 'total RAP'] = RAP
+    HT = 0
+    TTC = 0
+    for index, row in orig_data.iterrows():
+        if ((row['AN'] == y) and (row['Representant'] == 'Bejaoui Sahbi' or row['Representant'] == 'Sahbi Bejaoui REV')):
+            HT = HT + row['Total HT']
+            TTC = TTC + row['Total TTC']
+    regl = 0
+    PR = 0
+    for index, row in data.iterrows():
+        if ((row['AN'] == y) and (row['Representant'] == 'Bejaoui Sahbi' or row['Representant'] == 'Sahbi Bejaoui REV')):
+            regl = regl + row['Total TTC']
+    BS.at[y, 'factures réglées période'] = regl
+    if (TTC == 0):
+        PR = 0
+    else:
+        PR = (regl / TTC) * 100
+    BS.at[y, 'pourcentage règlement'] = PR
+    
+    BS.at[y, 'factures HT année'] = HT
+    BS.at[y, 'factures TTC année'] = TTC
+     
 
-SA = pd.DataFrame(d, columns = ['CA HT periode' , 'CA TTC période', 'total réglements période' , 'total RAP' , 'comms période à payer'], index = list(ind))
+SA = pd.DataFrame(d, columns = ['factures HT année', 'factures TTC année', 'factures réglées période', 'pourcentage règlement', 'commissions année', 'commission période', 'commission RAP'], index = list(ind))
 
 for y in ind:
-	HT = 0
-	TTC = 0
-	regl = 0
-	RAP = 0
-	for index, row in data.iterrows():
-		if ((row['AN'] == y) and (row['Representant'] == 'Saidi Abdelkarim' or row['Representant'] == 'Abdelkarim Saidi REV')):
-			HT = HT + row['Total HT']
-			TTC = TTC + row['Total TTC']
-			regl = regl + row['Montant_Reglement']
-			RAP = RAP + row['RAP']
-	SA.at[y, 'CA HT periode'] = HT
-	SA.at[y, 'CA TTC période'] = TTC
-	SA.at[y, 'total réglements période'] = regl
-	SA.at[y, 'total RAP'] = RAP
+    HT = 0
+    TTC = 0
+    for index, row in orig_data.iterrows():
+        if ((row['AN'] == y) and (row['Representant'] == 'Saidi Abdelkarim' or row['Representant'] == 'Abdelkarim Saidi REV')):
+            HT = HT + row['Total HT']
+            TTC = TTC + row['Total TTC']
+    SA.at[y, 'factures HT année'] = HT
+    SA.at[y, 'factures TTC année'] = TTC
+    regl = 0
+    PR = 0
+    for index, row in data.iterrows():
+        if ((row['AN'] == y) and (row['Representant'] == 'Saidi Abdelkarim' or row['Representant'] == 'Abdelkarim Saidi REV')):
+            regl = regl + row['Total TTC']
+    SA.at[y, 'factures réglées période'] = regl
+    if (TTC == 0):
+        PR = 0
+    else:
+        PR = (regl / TTC) * 100
+    SA.at[y, 'pourcentage règlement'] = PR
 
-#print(table5)
+
+#print(table4)
 
 BS['com %'] = [0.0] * ran
 SA['com %'] = [0.0] * ran
 x = 2016
-for index, row in table5.iterrows():
+for index, row in table4.iterrows():
 	BS.at[x, 'com %'] = row['Bejaoui Sahbi']
 	SA.at[x, 'com %'] = row['Saidi Abdelkarim']
 	x = x + 1
 
-for index, row in BS.iterrows():
-	BS.at[index, 'comms période à payer'] = row['com %'] * row['CA HT periode']
+#print(BS)
 
+CAn = 0
+CP = 0
+RAP = 0
+
+y = 2016
+for index, row in BS.iterrows():
+    CAn = row['com %']
+    BS.at[y, 'commissions année'] = CAn
+    
+    PR = row['pourcentage règlement']
+    CP = (PR / 100) * CAn
+    BS.at[y, 'commission période'] = CP
+    
+    RAP = CAn - CP
+    BS.at[y, 'commission RAP'] = RAP
+
+    y = y + 1
+
+y = 2016
 for index, row in SA.iterrows():
-	SA.at[index, 'comms période à payer'] = row['com %'] * row['CA HT periode']
+    CAn = row['com %']
+    SA.at[y, 'commissions année'] = CAn
+    
+    PR = row['pourcentage règlement']
+    CP = (PR / 100) * CAn
+    SA.at[y, 'commission période'] = CP
+    
+    RAP = CAn - CP
+    SA.at[y, 'commission RAP'] = RAP
+
+    y = y + 1
 
 BS = BS.append(BS.sum().rename('Total'))
 
