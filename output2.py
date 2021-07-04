@@ -108,6 +108,7 @@ data.sort_values(by=['AN'])
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
+#pd.set_option('display.float_format', '{:,.0f}'.format)
 
 #del data['INTITULE CLIENT']
 #del data['N° CLIENT']
@@ -162,8 +163,17 @@ orig_data = pd.read_excel('data.xlsx', header = 0)
 
 table4 = pd.read_excel('Commissions_BejaouiS_SaidiA_total.xlsx', header = 0)
 
-#table5 = pd.read_excel('rapport_commissions_CA.xlsx', header = 0)
-#table5 = pd.read_excel('table5.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+Obj_BS = pd.read_excel('Objectifs_BejaouiS.xlsx', header = 0)
+
+Obj_BS.set_index('AN', inplace=True, drop=True)
+
+del Obj_BS['charges']
+
+Obj_SA = pd.read_excel('Objectifs_SaidiA.xlsx', header = 0)
+
+Obj_SA.set_index('AN', inplace=True, drop=True)
+
+del Obj_SA['charges']
 
 ran = 2025 - 2016 + 1
 ind = range(2016, 2016 + ran)
@@ -283,5 +293,13 @@ del SA['com %']
 #print(f'commissions abdeelkrim saidi à payer, période: {date_deb} - {date_fin}\n') 
 #print(SA)
 
-SA.to_excel("Commissions_SaidiA_periode_saisie.xlsx")
-BS.to_excel("Commissions_BejaouiS_periode_saisie.xlsx")
+Obj_BS = pd.concat([Obj_BS, BS], axis=1)
+#Obj_BS.round(1)
+
+Obj_SA = pd.concat([Obj_SA, SA], axis=1)
+#Obj_SA.round(1)
+
+# pd.options.display.float_format = '{:, .2f}'.format
+
+Obj_SA.to_excel("Commissions_SaidiA_periode_saisie.xlsx", float_format="%.1f")
+Obj_BS.to_excel("Commissions_BejaouiS_periode_saisie.xlsx", float_format="%.1f")
