@@ -5,6 +5,8 @@ import math
 import re
 from tkinter import *
 from tkinter import messagebox
+from openpyxl import Workbook
+from openpyxl import load_workbook
 
 global e1
 global e2
@@ -163,13 +165,13 @@ orig_data = pd.read_excel('data.xlsx', header = 0)
 
 table4 = pd.read_excel('Commissions_BejaouiS_SaidiA_total.xlsx', header = 0)
 
-Obj_BS = pd.read_excel('Objectifs_BejaouiS.xlsx', header = 0)
+Obj_BS = pd.read_excel('Objectifs_BejaouiS.xlsx', header = 0, converters={'% VD':str,'% VR':str, '% excellence':str})
 
 Obj_BS.set_index('AN', inplace=True, drop=True)
 
 del Obj_BS['charges']
 
-Obj_SA = pd.read_excel('Objectifs_SaidiA.xlsx', header = 0)
+Obj_SA = pd.read_excel('Objectifs_SaidiA.xlsx', header = 0, converters={'% VD':str,'% VR':str, '% excellence':str})
 
 Obj_SA.set_index('AN', inplace=True, drop=True)
 
@@ -181,12 +183,12 @@ d = {
     'factures HT année':[0.0] * ran,
     'factures TTC année':[0.0] * ran,
     'factures réglées période':[0.0] * ran,
-    'pourcentage règlement':[0.0] * ran, 
+    '% règlement':[0.0] * ran, 
     'commissions année':[0.0] * ran,
     'commission période':[0.0] * ran,
     'commission RAP':[0.0] * ran
 }
-BS = pd.DataFrame(d, columns = ['factures HT année', 'factures TTC année', 'factures réglées période', 'pourcentage règlement', 'commissions année', 'commission période', 'commission RAP'], index = list(ind))
+BS = pd.DataFrame(d, columns = ['factures HT année', 'factures TTC année', 'factures réglées période', '% règlement', 'commissions année', 'commission période', 'commission RAP'], index = list(ind))
 
 for y in ind:
     HT = 0
@@ -205,13 +207,13 @@ for y in ind:
         PR = 0
     else:
         PR = (regl / TTC) * 100
-    BS.at[y, 'pourcentage règlement'] = PR
+    BS.at[y, '% règlement'] = PR
     
     BS.at[y, 'factures HT année'] = HT
     BS.at[y, 'factures TTC année'] = TTC
      
 
-SA = pd.DataFrame(d, columns = ['factures HT année', 'factures TTC année', 'factures réglées période', 'pourcentage règlement', 'commissions année', 'commission période', 'commission RAP'], index = list(ind))
+SA = pd.DataFrame(d, columns = ['factures HT année', 'factures TTC année', 'factures réglées période', '% règlement', 'commissions année', 'commission période', 'commission RAP'], index = list(ind))
 
 for y in ind:
     HT = 0
@@ -232,7 +234,7 @@ for y in ind:
         PR = 0
     else:
         PR = (regl / TTC) * 100
-    SA.at[y, 'pourcentage règlement'] = PR
+    SA.at[y, '% règlement'] = PR
 
 
 #print(table4)
@@ -256,7 +258,7 @@ for index, row in BS.iterrows():
     CAn = row['com %']
     BS.at[y, 'commissions année'] = CAn
     
-    PR = row['pourcentage règlement']
+    PR = row['% règlement']
     CP = (PR / 100) * CAn
     BS.at[y, 'commission période'] = CP
     
@@ -270,7 +272,7 @@ for index, row in SA.iterrows():
     CAn = row['com %']
     SA.at[y, 'commissions année'] = CAn
     
-    PR = row['pourcentage règlement']
+    PR = row['% règlement']
     CP = (PR / 100) * CAn
     SA.at[y, 'commission période'] = CP
     
@@ -286,20 +288,98 @@ SA = SA.append(SA.sum().rename('Total'))
 del BS['com %']
 del SA['com %']
 
-#print(f'commissions Sahbi Bejaoui à payer, période: {date_deb} - {date_fin}\n')
-#print(BS)
-#print('\n')
-
-#print(f'commissions abdeelkrim saidi à payer, période: {date_deb} - {date_fin}\n') 
-#print(SA)
-
 Obj_BS = pd.concat([Obj_BS, BS], axis=1)
-#Obj_BS.round(1)
+
+Obj_BS['% règlement'] = pd.Series(["{0:.1f}%".format(val) for val in Obj_BS['% règlement']], index = Obj_BS.index)
+
+Obj_BS['% VD'] = pd.Series(["{0:.1f}%".format(float(val) * 100) for val in Obj_BS['% VD']], index = Obj_BS.index)
+
+Obj_BS['% VR'] = pd.Series(["{0:.1f}%".format(float(val) * 100) for val in Obj_BS['% VR']], index = Obj_BS.index)
+
+Obj_BS['% excellence'] = pd.Series(["{0:.1f}%".format(float(val) * 100) for val in Obj_BS['% excellence']], index = Obj_BS.index)
 
 Obj_SA = pd.concat([Obj_SA, SA], axis=1)
-#Obj_SA.round(1)
 
-# pd.options.display.float_format = '{:, .2f}'.format
+Obj_SA['% règlement'] = pd.Series(["{0:.1f}%".format(val) for val in Obj_SA['% règlement']], index = Obj_SA.index)
 
-Obj_SA.to_excel("Commissions_SaidiA_periode_saisie.xlsx", float_format="%.1f")
-Obj_BS.to_excel("Commissions_BejaouiS_periode_saisie.xlsx", float_format="%.1f")
+Obj_SA['% VD'] = pd.Series(["{0:.1f}%".format(float(val) * 100) for val in Obj_SA['% VD']], index = Obj_SA.index)
+
+Obj_SA['% VR'] = pd.Series(["{0:.1f}%".format(float(val) * 100) for val in Obj_SA['% VR']], index = Obj_SA.index)
+
+Obj_SA['% excellence'] = pd.Series(["{0:.1f}%".format(float(val) * 100) for val in Obj_SA['% excellence']], index = Obj_SA.index)
+
+Obj_BS.to_excel("Obj_BS.xlsx", float_format="%.0f")
+
+wb = load_workbook("Obj_BS.xlsx")
+
+ws1 = wb.active
+ws2 = wb.create_sheet("new_BS")
+
+start_row = 1
+start_col = 1
+
+for row in ws1.iter_rows(min_row=start_row):
+    for cell in row:
+        # print(cell.value)
+        ws2.cell(row = start_row+3, column = start_col, value=cell.value) # start_row - 2 will assign the value to the same column up 2 rows
+        start_col += 1 # increment the column, for use of destination sheet
+    start_row += 1 # increment the row, for use of destination sheet
+    start_col = 1 # reset to first column after row processing
+
+#std=wb.get_sheet_by_name('Sheet1')
+
+wb.active = ws2
+
+ws2['A1'] = "Date debut:"
+ws2['A2'] = date_deb.strftime('%d/%m/%y')
+
+ws2['B1'] = "Date fin:"
+ws2['B2'] = date_fin.strftime('%d/%m/%y')
+
+ws2['J15'] = None
+
+
+
+del wb['Sheet1']
+
+wb.save("Commissions_BejaouiS_periode_saisie.xlsx")
+
+
+Obj_SA.to_excel("Obj_SA.xlsx", float_format="%.0f")
+
+wb = load_workbook("Obj_SA.xlsx")
+
+ws1 = wb.active
+ws2 = wb.create_sheet("new_SA")
+
+start_row = 1
+start_col = 1
+
+for row in ws1.iter_rows(min_row=start_row):
+    for cell in row:
+        # print(cell.value)
+        ws2.cell(row = start_row+3, column = start_col, value=cell.value) # start_row - 2 will assign the value to the same column up 2 rows
+        start_col += 1 # increment the column, for use of destination sheet
+    start_row += 1 # increment the row, for use of destination sheet
+    start_col = 1 # reset to first column after row processing
+
+#std=wb.get_sheet_by_name('Sheet1')
+
+wb.active = ws2
+
+ws2['A1'] = "Date debut:"
+ws2['A2'] = date_deb.strftime('%d/%m/%y')
+
+ws2['B1'] = "Date fin:"
+ws2['B2'] = date_fin.strftime('%d/%m/%y')
+
+ws2['J15'] = None
+
+del wb['Sheet1']
+
+
+
+
+wb.save("Commissions_SaidiA_periode_saisie.xlsx")
+
+
