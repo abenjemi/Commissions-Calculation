@@ -20,16 +20,12 @@ myButton = Button(root, text="Cliquez SVP", command=root.destroy, fg="blue", bg=
 root.mainloop()
 
 data = pd.read_excel('MS_M_CalculComms.xlsx', header = 0)
-#data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 del data['CO_No']
 
 data2 = pd.read_excel('MSMARINE_CalculComms.xlsx', header = 0)
-#data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 data = data.append(data2, ignore_index = True) #get all the data
-#print('data\n\n')
-#print(data) 
 
 data.drop_duplicates(subset = ["DOC"], keep="first", inplace=True) #drop duplicates
 data.sort_values(by=['AN'])
@@ -37,10 +33,6 @@ pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 data.to_excel("data.xlsx") #get the duplicates free table on excel
-
-#print('Result 1:\n')
-#print(data)
-#print('\n\n')
 
 #2
 ran = 2025 - 2016 + 1
@@ -64,13 +56,9 @@ for y in ind:
 
 df.to_excel("CA_BejaouiS_SaidiA.xlsx") #CA
 
-#print('Result 2:\n')
-#print (df)
-#print('\n\n')
-
 #3
 input2_BS = pd.read_excel('Objectifs_BejaouiS.xlsx', header = 0)
-#input2_BS = pd.read_excel('input2_BS.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+
 input2_BS = input2_BS.fillna(0)
 input2_BS['CA'] = [0.0] * ran
 input2_BS['Bejaoui Sahbi'] = [0.0] * ran
@@ -80,7 +68,7 @@ BS = df["Bejaoui Sahbi"]
 SB_REV = df["Sahbi Bejaoui REV"]
 
 input2_SA = pd.read_excel('Objectifs_SaidiA.xlsx', header = 0)
-#input2_SA = pd.read_excel('input2_SA.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
+
 input2_SA = input2_SA.fillna(0)
 input2_SA['CA'] = [0.0] * ran
 input2_SA['Saidi Abdelkarim'] = [0.0] * ran

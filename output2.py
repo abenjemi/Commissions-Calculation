@@ -48,11 +48,9 @@ def fin_fun():
         messagebox.showerror("", "Veuillez entrer une date fin")
     else:
         try:
-            #date_fin = datetime.datetime.strptime(fin, "%d/%m/%y").strftime('%d/%m/%y')
             date_fin = datetime.datetime.strptime(fin, "%d/%m/%y")
             if (date_fin < date_deb):
                 messagebox.showerror("", "Erreur: date fin < date debut")
-                #e2.delete(0,"end")
                 return
         except:
             messagebox.showerror("", "Veuillez suivre ce format: dd/mm/yy")
@@ -83,7 +81,6 @@ e1.place(x=240, y = 10)
 
 button1 = Button(root, text="Cliquer", command=deb_fun)
 button1.place(x=375, y=10)
-#button1.bind("<Return>", deb)
 
 e2 = Entry(root, state='disabled')
 e2.place(x=220, y=90)
@@ -91,18 +88,13 @@ e2.place(x=220, y=90)
 button2 = Button(root, text="Confirmer", state='disabled', command=fin_fun)
 button2.place(x=375, y=90)
 
-
-
 root.mainloop()
 
 
-#data = pd.read_excel('input1_old.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 data = pd.read_excel('MS_M_CalculComms.xlsx', header = 0)
-
 del data['CO_No']
 
 data2 = pd.read_excel('MSMARINE_CalculComms.xlsx', header = 0)
-#data2 = pd.read_excel('input1a.xlsx', header = 0, encoding = "ISO-8859-1", error_bad_lines=False, warn_bad_lines=False)
 
 data = data.append(data2, ignore_index = True)
 data.sort_values(by=['AN'])
@@ -110,55 +102,25 @@ data.sort_values(by=['AN'])
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
-#pd.set_option('display.float_format', '{:,.0f}'.format)
-
-#del data['INTITULE CLIENT']
-#del data['N° CLIENT']
-#del data['Marge']
-
-#data[['DR_sum', 'mt_sum']]=data.groupby('DOC')['DR_Montant', 'montant'].transform('sum')
 
 data = data.sort_values('Date_Regl')
-#data.groupby(['DOC'])['Montant_Reglement'].sum().reset_index()#.drop_duplicates('DOC', keep='last')
 
 data['Montant_Reglement'] = data.groupby(['DOC'])['Montant_Reglement'].transform('sum')
 
 data = data.drop_duplicates('DOC', keep='last')
 
-#data = data.groupby('DOC')['Date Regl'].max().reset_index()
-
-#data = data.groupby(['DOC'])['Montant_Reglement'].sum()
-
-#data['réglements'] = data['Montant_Reglement']
 data['RAP'] = data['Total TTC'] - data['Montant_Reglement']
 data['RAP'] = data['RAP'].apply(np.floor)
-#math.floor(data['RAP'])
-#if ((data['RAP'] < 1) and (data['RAP'] > 0)):
-#    data['RAP'] =  0
-
-
-#data = data.drop(['DR_Montant', 'montant', 'DR_sum', 'mt_sum'], axis = 1)
-#data = data.drop(['Montant_Reglement'])
 
 data.to_excel("etat_reglements_factures.xlsx")
 
-#print("TABLEAU A: \n")
-#print(data)
-#print("\n\n")
 
 for index, row in data.iterrows():
 	if (row['Date_Regl'] < date_deb or row['Date_Regl'] > date_fin):
 		data.drop(index, inplace=True)
 
-# for index, row in data.iterrows():
-# 	if (row['RAP'] > 0.5):
-# 		data.drop(index, inplace=True)
 data.drop(data[data['RAP'] > 0].index, inplace = True)
-# index_names = data[ data['Age'] == 21 ].index
-# df.drop(index_names, inplace = True)
 
-#print('TABLEAU B: \n')
-#print(data)
 data.to_excel("etat_factures_reglees100%_période_saisie.xlsx")
 
 orig_data = pd.read_excel('data.xlsx', header = 0)
@@ -338,12 +300,13 @@ ws2['B2'] = date_fin.strftime('%d/%m/%y')
 
 ws2['J15'] = None
 
-
+for row in ws2['D8:F15']:
+    for cell in row:
+        cell.value = None
 
 del wb['Sheet1']
 
 wb.save("Commissions_BejaouiS_periode_saisie.xlsx")
-
 
 Obj_SA.to_excel("Obj_SA.xlsx", float_format="%.0f")
 
@@ -375,10 +338,11 @@ ws2['B2'] = date_fin.strftime('%d/%m/%y')
 
 ws2['J15'] = None
 
+for row in ws2['D8:F15']:
+    for cell in row:
+        cell.value = None
+
 del wb['Sheet1']
-
-
-
 
 wb.save("Commissions_SaidiA_periode_saisie.xlsx")
 
