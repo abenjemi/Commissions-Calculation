@@ -7,11 +7,16 @@ from tkinter import *
 from tkinter import messagebox
 from openpyxl import Workbook
 from openpyxl import load_workbook
+import pyodbc
 
 global e1
 global e2
 global button1
 global button2
+global e_username
+global e_password
+global button_username
+global button_password
 
 def deb_fun():
     global debut
@@ -31,7 +36,7 @@ def deb_fun():
             e1.delete(0,"end")
         #print(date_deb)
         label3 = Label(root, text="La date debut est %s" %(date_deb.strftime('%d/%m/%y')), font=("Arial", 13))
-        label3.place(x=10, y=50)
+        label3.place(x=10, y=210)
         e1.delete(0,"end")
         e1.config(state='disabled')
         e2.config(state='normal')
@@ -57,36 +62,98 @@ def fin_fun():
             e2.delete(0,"end")
             return
         label4 = Label(root, text="La date fin est %s" %(date_fin.strftime('%d/%m/%y')), font=("Arial", 13))
-        label4.place(x=10, y=130)
+        label4.place(x=10, y=290)
         e2.config(state='disabled')
         button2.config(state='disabled')
         messagebox.showinfo("Output", "Veuillez cliquer pour voir les resultats suivants sur le meme dossier:\n1. CA_BejaouiS_SaidiA\n2. Commissions_BejaouiS_SaidiA_details\n3. Commissions_BejaouiS_SaidiA_total\n4. rapport_commissions_CA\n5. etat_reglements_factures\n6. etat_factures_reglees100%_période_saisie\n7. Commissions_BejaouiS_periode_saisie\n8. Commissions_SaidiA_periode_saisie")
         root.destroy()
 
 
+#USERNAME FUNCTION
+
+def username_fun():
+    global user
+    global username
+    user = e_username.get()
+
+    if (user == ""):
+        messagebox.showerror("", "Veuillez entrer un nom d'utilisateur")
+
+    else:
+        user_print = Label(root, text="Le nom d'utilisateur est %s" %user, font=("Arial", 13))
+        user_print.place(x=10, y=50)
+        e_username.delete(0,"end")
+        e_username.config(state='disabled')
+        e_password.config(state='normal')
+        button_username.config(state='disabled')
+        button_password.config(state='normal')
+
+
+#PASSWORD FUNCTION
+
+def password_fun():
+    global pwd
+    global password
+    pwd = e_password.get()
+
+    if (pwd == ""):
+        messagebox.showerror("", "Veuillez entrer un mot de passe valide")
+
+    else:
+        e_password.delete(0,"end")
+        e_password.config(state='disabled')
+        e1.config(state='normal')
+        button_password.config(state='disabled')
+        button1.config(state='normal')
 
 
 root = Tk()
 root.title("Entrer date debut et date fin")
-root.geometry("450x200")
+root.geometry("500x400")
+
+label_username = Label(root, text="Veuillez entrer votre nom d'utilisateur", font=("Arial", 13))
+label_password = Label(root, text="Veuillez entrer votre mot de passe ", font=("Arial", 13))
+
+label_username.place(x=10, y=10)
+label_password.place(x=10, y=90)
+
+username = StringVar()
+password = StringVar()
+
+e_username = Entry(root, textvariable=username)
+e_username.place(x=290, y = 10)
+
+button_username = Button(root, text="Entrer",command=username_fun)
+button_username.place(x=430, y=10)
+
+e_password = Entry(root, show="*", textvariable=password, state='disabled')
+e_password.place(x=270, y=90)
+
+button_password = Button(root, text="Confirmer", state='disabled', command=password_fun)
+button_password.place(x=420, y=90)
+
+
+#TKINTER DATES
+
 
 label1 = Label(root, text="Veuillez entrer une date début ", font=("Arial", 13))
 label2 = Label(root, text="Veuillez entrer une date fin ", font=("Arial", 13))
 
-label1.place(x=10, y=10)
-label2.place(x=10, y=90)
+label1.place(x=10, y=170)
+label2.place(x=10, y=250)
 
-e1 = Entry(root)
-e1.place(x=240, y = 10)
+e1 = Entry(root, state = 'disabled')
+e1.place(x=240, y = 170)
 
-button1 = Button(root, text="Cliquer", command=deb_fun)
-button1.place(x=375, y=10)
+button1 = Button(root, text="Entrer", state='disabled', command=deb_fun)
+button1.place(x=375, y=170)
 
 e2 = Entry(root, state='disabled')
-e2.place(x=220, y=90)
+e2.place(x=220, y=250)
 
 button2 = Button(root, text="Confirmer", state='disabled', command=fin_fun)
-button2.place(x=375, y=90)
+button2.place(x=375, y=250)
+
 
 root.mainloop()
 
@@ -96,9 +163,38 @@ root.mainloop()
 
 data = pd.read_excel('MS_M_CalculComms.xlsx', header = 0)
 
+# server = '192.168.10.14' 
+# database = 'MSM'  
+
+# cnxn = pyodbc.connect(
+#     'DRIVER={SQL Server Native Client 11.0}; \
+#     SERVER='+ server +'; \
+#     DATABASE='+ database +';\
+#     uid=SDEV;\
+#     pwd=test123123;'
+# )
+
+# cursor = cnxn.cursor()
+
+# data = pd.read_sql_query('SELECT TOP (200) AN, DOC, [DATE DOC], [INTITULE CLIENT], [N° Client], [Total HT], [Total TTC], Marge, Representant, CO_No, Montant_Reglement, Date_Regl FROM MS_M_CalculComms',cnxn)
+
 del data['CO_No']
 
 data2 = pd.read_excel('MSMARINE_CalculComms.xlsx', header = 0)
+
+# database = 'MSMARINE'  
+
+# cnxn = pyodbc.connect(
+#     'DRIVER={SQL Server Native Client 11.0}; \
+#     SERVER='+ server +'; \
+#     DATABASE='+ database +';\
+#     uid=SDEV;\
+#     pwd=test123123;'
+# )
+
+# cursor = cnxn.cursor()
+
+# data2 = pd.read_sql_query('SELECT TOP (200) AN, DOC, [DATE DOC], [INTITULE CLIENT], [N° Client], [Total HT], [Total TTC], Marge, Representant, CO_No, Montant_Reglement, Date_Regl FROM MSMARINE_CalculComms',cnxn)
 
 data = data.append(data2, ignore_index = True) #get all the data
 
