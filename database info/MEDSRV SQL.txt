@@ -1,0 +1,11 @@
+1 - VPN
+
+User VPN 
+Pw @VpnMedSRV!2020
+
+2 Remote Desktop 
+
+192.168.10.14
+
+User SDEV
+Pw test123123

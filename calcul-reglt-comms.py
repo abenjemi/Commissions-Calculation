@@ -7,159 +7,188 @@ from tkinter import *
 from tkinter import messagebox
 from openpyxl import Workbook
 from openpyxl import load_workbook
-import pyodbc
+# import pyodbc
 
-global e1
-global e2
-global button1
-global button2
-global e_username
-global e_password
-global button_username
-global button_password
+# global e1
+# global e2
+# global button1
+# global button2
+# global e_username
+# global e_password
+# global button_username
+# global button_password
 
-def deb_fun():
-    global debut
-    global date_deb
-    debut = e1.get()
-    #date_deb = e1.get()
+# def deb_fun():
+#     global debut
+#     global date_deb
+#     debut = e1.get()
+#     #date_deb = e1.get()
 
-    if (debut == ""):
-        messagebox.showerror("", "Veuillez entrer une date debut")
+#     if (debut == ""):
+#         messagebox.showerror("", "Veuillez entrer une date debut")
 
-    else:
-        try:
-            #date_deb = datetime.datetime.strptime(debut, "%d/%m/%y").strftime('%d/%m/%y')
-            date_deb = datetime.datetime.strptime(debut, "%d/%m/%y")
-        except:
-            messagebox.showerror("", "Veuillez suivre ce format: jj/mm/aa")
-            e1.delete(0,"end")
-        #print(date_deb)
-        label3 = Label(root, text="La date debut est %s" %(date_deb.strftime('%d/%m/%y')), font=("Arial", 13))
-        label3.place(x=10, y=210)
-        e1.delete(0,"end")
-        e1.config(state='disabled')
-        e2.config(state='normal')
-        button1.config(state='disabled')
-        button2.config(state='normal')
-        #date_debut = date_deb
+#     else:
+#         try:
+#             #date_deb = datetime.datetime.strptime(debut, "%d/%m/%y").strftime('%d/%m/%y')
+#             date_deb = datetime.datetime.strptime(debut, "%d/%m/%y")
+#         except:
+#             messagebox.showerror("", "Veuillez suivre ce format: jj/mm/aa")
+#             e1.delete(0,"end")
+#         #print(date_deb)
+#         label3 = Label(root, text="La date debut est %s" %(date_deb.strftime('%d/%m/%y')), font=("Arial", 13))
+#         label3.place(x=10, y=210)
+#         e1.delete(0,"end")
+#         e1.config(state='disabled')
+#         e2.config(state='normal')
+#         button1.config(state='disabled')
+#         button2.config(state='normal')
+#         #date_debut = date_deb
     
-def fin_fun():
-    global fin
-    global date_fin
-    fin = e2.get()
+# def fin_fun():
+#     global fin
+#     global date_fin
+#     fin = e2.get()
 
-    if (fin == ""):
-        messagebox.showerror("", "Veuillez entrer une date fin")
-    else:
-        try:
-            date_fin = datetime.datetime.strptime(fin, "%d/%m/%y")
-            if (date_fin < date_deb):
-                messagebox.showerror("", "Erreur: date fin < date debut")
-                return
-        except:
-            messagebox.showerror("", "Veuillez suivre ce format: dd/mm/yy")
-            e2.delete(0,"end")
-            return
-        label4 = Label(root, text="La date fin est %s" %(date_fin.strftime('%d/%m/%y')), font=("Arial", 13))
-        label4.place(x=10, y=290)
-        e2.config(state='disabled')
-        button2.config(state='disabled')
-        messagebox.showinfo("Output", "Veuillez cliquer pour voir les resultats suivants sur le meme dossier:\n1. CA_BejaouiS_SaidiA\n2. Commissions_BejaouiS_SaidiA_details\n3. Commissions_BejaouiS_SaidiA_total\n4. rapport_commissions_CA\n5. etat_reglements_factures\n6. etat_factures_reglees100%_période_saisie\n7. Commissions_BejaouiS_periode_saisie\n8. Commissions_SaidiA_periode_saisie")
-        root.destroy()
-
-
-#USERNAME FUNCTION
-
-def username_fun():
-    global user
-    global username
-    user = e_username.get()
-
-    if (user == ""):
-        messagebox.showerror("", "Veuillez entrer un nom d'utilisateur")
-
-    else:
-        user_print = Label(root, text="Le nom d'utilisateur est %s" %user, font=("Arial", 13))
-        user_print.place(x=10, y=50)
-        e_username.delete(0,"end")
-        e_username.config(state='disabled')
-        e_password.config(state='normal')
-        button_username.config(state='disabled')
-        button_password.config(state='normal')
+#     if (fin == ""):
+#         messagebox.showerror("", "Veuillez entrer une date fin")
+#     else:
+#         try:
+#             date_fin = datetime.datetime.strptime(fin, "%d/%m/%y")
+#             if (date_fin < date_deb):
+#                 messagebox.showerror("", "Erreur: date fin < date debut")
+#                 return
+#         except:
+#             messagebox.showerror("", "Veuillez suivre ce format: dd/mm/yy")
+#             e2.delete(0,"end")
+#             return
+#         label4 = Label(root, text="La date fin est %s" %(date_fin.strftime('%d/%m/%y')), font=("Arial", 13))
+#         label4.place(x=10, y=290)
+#         e2.config(state='disabled')
+#         button2.config(state='disabled')
+#         messagebox.showinfo("Output", "Veuillez cliquer pour voir les resultats suivants sur le meme dossier:\n1. CA_BejaouiS_SaidiA\n2. Commissions_BejaouiS_SaidiA_details\n3. Commissions_BejaouiS_SaidiA_total\n4. rapport_commissions_CA\n5. etat_reglements_factures\n6. etat_factures_reglees100%_période_saisie\n7. Commissions_BejaouiS_periode_saisie\n8. Commissions_SaidiA_periode_saisie")
+#         root.destroy()
 
 
-#PASSWORD FUNCTION
+# #USERNAME FUNCTION
 
-def password_fun():
-    global pwd
-    global password
-    pwd = e_password.get()
+# def username_fun():
+#     global user
+#     global username
+#     user = e_username.get()
 
-    if (pwd == ""):
-        messagebox.showerror("", "Veuillez entrer un mot de passe valide")
+#     if (user == ""):
+#         messagebox.showerror("", "Veuillez entrer un nom d'utilisateur")
 
-    else:
-        e_password.delete(0,"end")
-        e_password.config(state='disabled')
-        e1.config(state='normal')
-        button_password.config(state='disabled')
-        button1.config(state='normal')
-
-
-root = Tk()
-root.title("Entrer date debut et date fin")
-root.geometry("500x400")
-
-label_username = Label(root, text="Veuillez entrer votre nom d'utilisateur", font=("Arial", 13))
-label_password = Label(root, text="Veuillez entrer votre mot de passe ", font=("Arial", 13))
-
-label_username.place(x=10, y=10)
-label_password.place(x=10, y=90)
-
-username = StringVar()
-password = StringVar()
-
-e_username = Entry(root, textvariable=username)
-e_username.place(x=290, y = 10)
-
-button_username = Button(root, text="Entrer",command=username_fun)
-button_username.place(x=430, y=10)
-
-e_password = Entry(root, show="*", textvariable=password, state='disabled')
-e_password.place(x=270, y=90)
-
-button_password = Button(root, text="Confirmer", state='disabled', command=password_fun)
-button_password.place(x=420, y=90)
+#     else:
+#         user_print = Label(root, text="Le nom d'utilisateur est %s" %user, font=("Arial", 13))
+#         user_print.place(x=10, y=50)
+#         e_username.delete(0,"end")
+#         e_username.config(state='disabled')
+#         e_password.config(state='normal')
+#         button_username.config(state='disabled')
+#         button_password.config(state='normal')
 
 
-#TKINTER DATES
+# #PASSWORD FUNCTION
+
+# def password_fun():
+#     global pwd
+#     global password
+#     pwd = e_password.get()
+
+#     if (pwd == ""):
+#         messagebox.showerror("", "Veuillez entrer un mot de passe valide")
+
+#     else:
+#         e_password.delete(0,"end")
+#         e_password.config(state='disabled')
+#         e1.config(state='normal')
+#         button_password.config(state='disabled')
+#         button1.config(state='normal')
 
 
-label1 = Label(root, text="Veuillez entrer une date début ", font=("Arial", 13))
-label2 = Label(root, text="Veuillez entrer une date fin ", font=("Arial", 13))
+# root = Tk()
+# root.title("Entrer date debut et date fin")
+# root.geometry("500x400")
 
-label1.place(x=10, y=170)
-label2.place(x=10, y=250)
+# label_username = Label(root, text="Veuillez entrer votre nom d'utilisateur", font=("Arial", 13))
+# label_password = Label(root, text="Veuillez entrer votre mot de passe ", font=("Arial", 13))
 
-e1 = Entry(root, state = 'disabled')
-e1.place(x=240, y = 170)
+# label_username.place(x=10, y=10)
+# label_password.place(x=10, y=90)
 
-button1 = Button(root, text="Entrer", state='disabled', command=deb_fun)
-button1.place(x=375, y=170)
+# username = StringVar()
+# password = StringVar()
 
-e2 = Entry(root, state='disabled')
-e2.place(x=220, y=250)
+# e_username = Entry(root, textvariable=username)
+# e_username.place(x=290, y = 10)
 
-button2 = Button(root, text="Confirmer", state='disabled', command=fin_fun)
-button2.place(x=375, y=250)
+# button_username = Button(root, text="Entrer",command=username_fun)
+# button_username.place(x=430, y=10)
+
+# e_password = Entry(root, show="*", textvariable=password, state='disabled')
+# e_password.place(x=270, y=90)
+
+# button_password = Button(root, text="Confirmer", state='disabled', command=password_fun)
+# button_password.place(x=420, y=90)
 
 
-root.mainloop()
+# #TKINTER DATES
+
+
+# label1 = Label(root, text="Veuillez entrer une date début ", font=("Arial", 13))
+# label2 = Label(root, text="Veuillez entrer une date fin ", font=("Arial", 13))
+
+# label1.place(x=10, y=170)
+# label2.place(x=10, y=250)
+
+# e1 = Entry(root, state = 'disabled')
+# e1.place(x=240, y = 170)
+
+# button1 = Button(root, text="Entrer", state='disabled', command=deb_fun)
+# button1.place(x=375, y=170)
+
+# e2 = Entry(root, state='disabled')
+# e2.place(x=220, y=250)
+
+# button2 = Button(root, text="Confirmer", state='disabled', command=fin_fun)
+# button2.place(x=375, y=250)
+
+
+# root.mainloop()
 
 #***OUTPUT 1***
 
 #TABLEAU 1
+
+# date_deb = datetime.datetime.strptime("01/01/22", "%d/%m/%y")
+# date_fin = datetime.datetime.strptime("30/04/22", "%d/%m/%y")
+# print(date_deb)
+
+isValid=False
+while not isValid:
+	userIn = input("Entrer une date début: ")
+	try:
+		
+		date_deb = datetime.datetime.strptime(userIn, "%d/%m/%y").date()
+		isValid=True
+	except:
+		print("Suivre ce format: dd/mm/yy !\n")
+
+print(f'La date début est {date_deb}\n')
+
+isValid = False
+while not isValid:
+	userIn = input("Entrer une date fin: ")
+	try:
+		date_fin = datetime.datetime.strptime(userIn, "%d/%m/%y").date()
+		if (date_fin > date_deb):
+			isValid = True
+		else:
+			print("Erreur: date fin < date debut !\n")
+	except:
+		print("Suivre ce format: dd/mm/yy !\n")
+print(f'La date fin est {date_fin}\n')
 
 data = pd.read_excel('MS_M_CalculComms.xlsx', header = 0)
 
@@ -551,7 +580,7 @@ ws2['B2'] = date_fin.strftime('%d/%m/%y')
 
 ws2['J15'] = None
 
-for row in ws2['D8:F15']:
+for row in ws2['D11:F15']:
     for cell in row:
         cell.value = None
 
@@ -589,7 +618,7 @@ ws2['B2'] = date_fin.strftime('%d/%m/%y')
 
 ws2['J15'] = None
 
-for row in ws2['D8:F15']:
+for row in ws2['D11:F15']:
     for cell in row:
         cell.value = None
 
